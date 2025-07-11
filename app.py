@@ -286,7 +286,6 @@ def approximate_phonemes(name, language='english'):
     i = 0
     while i < len(name):
         if language.lower() != 'english' and i < len(name) - 1:
-            # Check for digraphs like 'bh', 'kh', etc.
             digraph = name[i:i+2]
             if digraph in letter_to_phoneme[language.lower()]:
                 phonemes.append(letter_to_phoneme[language.lower()][digraph])
@@ -323,7 +322,7 @@ if submitted and name:
     for p in phonemes:
         if p in phoneme_to_chakra:
             activated_chakras.add(phoneme_to_chakra[p])
-    
+
     if activated_chakras:
         st.warning(f"Your name ignites: {', '.join(activated_chakras)} – A celestial symphony! 🎶🌟")
     else:
@@ -351,15 +350,28 @@ if submitted and name:
             st.text("⚪\n🌟 🧘\n🌌 🌺")
         st.markdown("---")
 
-    # Chakra Poem
-    st.header("📜 Your Cosmic Chakra Poem 🌹")
-    poem_lines = [f"In the cosmos, {name} shines bright,"]
+    # Enhanced Mystical and Ambiguous Chakra Poem
+    st.header("📜 Your Enigmatic Cosmic Chakra Ode 🌹")
+    mystical_phrases = [
+        "Shadows whisper secrets in veiled twilight",
+        "Ethereal mists conceal ancient enigmas",
+        "Veils of illusion dance with hidden flames",
+        "Whispers from the void echo forgotten dreams",
+        "Cosmic threads weave ambiguous fates",
+        "Spectral lights flicker in boundless voids",
+        "Enshrouded essences drift through nebulous realms",
+        "Mystic echoes resonate in silent voids",
+        "Ambiguous stars align in cryptic patterns"
+    ]
+    poem_lines = [f"Beneath veiled stars, {name} emerges from the ether,"]
     for chakra in activated_chakras:
-        words = random.choice(chakra_descriptions[chakra].split(',')[0].split(' ')[-5:-2])
-        poem_lines.append(f"{chakra} glows, {''.join(words).strip()} in starlight! ✨")
-    poem_lines.append(f"Your essence soars, a radiant cosmic flight! 🚀🌈")
+        # Make more mystical and ambiguous
+        desc_words = random.choice(chakra_descriptions[chakra].split(',')[0].split(' ')[-5:-2])
+        phrase = random.choice(mystical_phrases)
+        poem_lines.append(f"{chakra} stirs, where {phrase}, in {''.join(desc_words).strip()}'s embrace... ✨")
+    poem_lines.append(f"In riddles of the cosmos, your spirit wanders eternally, unbound! 🚀🌈")
     poem = '\n'.join(poem_lines)
-    st.text_area("Poem", poem, height=150)
+    st.text_area("Ode", poem, height=200)
 
     # Fun Outputs
     st.header("🌌 Playful Cosmic Insights 🎉")
