@@ -1,9 +1,10 @@
+# -*- coding: utf-8 -*-
 import streamlit as st
-import random  # For random poem variations
+import random
 
-# Hardcoded phoneme to chakra map based on chat data (English primary; simplified for others)
+# Hardcoded phoneme to chakra map based on chat data
 phoneme_to_chakra = {
-    # English (from chat)
+    # English
     '/s/': 'Muladhara',
     '/z/': 'Muladhara',
     '/ʃ/': 'Muladhara',
@@ -24,18 +25,18 @@ phoneme_to_chakra = {
     '/v/': 'Manipura',
     '/θ/': 'Manipura',
     '/ð/': 'Manipura',
-    '/tʃ/': 'Ajna',  # Reassigned from Anahata as per reasoning
-    '/dʒ/': 'Ajna',  # Reassigned
+    '/tʃ/': 'Ajna',
+    '/dʒ/': 'Ajna',
     '/h/': 'Anahata',
-    '/ŋ/': 'Vishuddha',  # Reassigned
-    '/æ/': 'Vishuddha',  # Reassigned
-    '/ɛ/': 'Vishuddha',  # Reassigned
-    '/ɪ/': 'Vishuddha',  # Reassigned
-    '/ʌ/': 'Vishuddha',  # Reassigned
-    '/ɒ/': 'Vishuddha',  # Reassigned
-    '/ʊ/': 'Vishuddha',  # Reassigned
-    '/ə/': 'Vishuddha',  # Reassigned
-    '/ɔː/': 'Vishuddha',  # Reassigned
+    '/ŋ/': 'Vishuddha',
+    '/æ/': 'Vishuddha',
+    '/ɛ/': 'Vishuddha',
+    '/ɪ/': 'Vishuddha',
+    '/ʌ/': 'Vishuddha',
+    '/ɒ/': 'Vishuddha',
+    '/ʊ/': 'Vishuddha',
+    '/ə/': 'Vishuddha',
+    '/ɔː/': 'Vishuddha',
     '/iː/': 'Vishuddha',
     '/uː/': 'Vishuddha',
     '/eɪ/': 'Vishuddha',
@@ -43,19 +44,39 @@ phoneme_to_chakra = {
     '/aʊ/': 'Vishuddha',
     '/ɔɪ/': 'Vishuddha',
     '/ɑː/': 'Vishuddha',
-    # Simplified for other languages (from chat mappings)
-    '/ʋ/': 'Muladhara',  # Shared in Sanskrit/Hindi/Kannada
+    # Sanskrit, Hindi, Kannada (simplified, based on chat mappings)
+    '/ʋ/': 'Muladhara',
     '/ʃ/': 'Muladhara',
     '/s/': 'Muladhara',
     '/h/': 'Muladhara',
     '/b/': 'Svadhisthana',
     '/bʰ/': 'Svadhisthana',
-    '/y/': 'Svadhisthana',  # /j/
+    '/m/': 'Svadhisthana',
+    '/j/': 'Svadhisthana',
+    '/r/': 'Svadhisthana',
+    '/l/': 'Svadhisthana',
     '/ɖ/': 'Manipura',
     '/ɖʰ/': 'Manipura',
-    '/ɳ/': 'Ajna',  # Reassigned
+    '/ɳ/': 'Ajna',
+    '/t/': 'Manipura',
+    '/tʰ/': 'Manipura',
+    '/d/': 'Manipura',
+    '/dʰ/': 'Manipura',
+    '/n/': 'Manipura',
+    '/p/': 'Manipura',
+    '/pʰ/': 'Manipura',
     '/k/': 'Anahata',
     '/kʰ/': 'Anahata',
+    '/ɡ/': 'Anahata',
+    '/ɡʰ/': 'Anahata',
+    '/ŋ/': 'Anahata',
+    '/c/': 'Anahata',
+    '/cʰ/': 'Anahata',
+    '/ɟ/': 'Anahata',
+    '/ɟʰ/': 'Anahata',
+    '/ɲ/': 'Vishuddha',  # Reassigned for Hindi, Kannada
+    '/ʈ/': 'Anahata',
+    '/ʈʰ/': 'Anahata',
     '/a/': 'Vishuddha',
     '/aː/': 'Vishuddha',
     '/i/': 'Vishuddha',
@@ -63,8 +84,10 @@ phoneme_to_chakra = {
     '/u/': 'Vishuddha',
     '/uː/': 'Vishuddha',
     '/e/': 'Vishuddha',
-    '/ai/': 'Vishuddha',
+    '/eː/': 'Vishuddha',
     '/o/': 'Vishuddha',
+    '/oː/': 'Vishuddha',
+    '/ai/': 'Vishuddha',
     '/au/': 'Vishuddha',
     '/ã/': 'Vishuddha',
     '/aḥ/': 'Vishuddha',
@@ -78,18 +101,18 @@ phoneme_to_chakra = {
     '/m/': 'Sahasrara'
 }
 
-# Chakra vivid descriptions with imagery and emojis (from research)
+# Vivid chakra descriptions with artistic imagery and emojis
 chakra_descriptions = {
-    'Muladhara': 'The Root Chakra, a crimson lotus rooted in the earth's core at the base of your spine, grounding you like an ancient mountain amidst stormy winds, symbolizing stability and survival. 🌍 🔴 🌱 🧘 🏔️',
-    'Svadhisthana': 'The Sacral Chakra, an orange river flowing below the navel, a vermillion lotus with a crescent moon, unleashing creativity and passion like a dancing flame in the ocean's embrace. 🟠 🌊 🌸 💃 🎨',
-    'Manipura': 'The Solar Plexus Chakra, a golden fire blazing near the navel, a 10-petaled lotus of willpower, radiating like the sun's core, fueling metabolism and inner strength in a cosmic furnace. 🟡 🔥 🌞 💪 🌟',
-    'Anahata': 'The Heart Chakra, a verdant hexagram lotus blooming in the chest, breathing air of compassion, flowing love like emerald rivers through the universe, bending karma with forgiveness's gentle breeze. 💚 🌬️ 🌸 ❤️ 🌌',
-    'Vishuddha': 'The Throat Chakra, a sapphire full-moon lotus in the throat, echoing aether's purity, purifying organs with immortal nectar, inspiring artistic truth like a starry night's symphony. 🔵 🌕 🗣️ 🎤 🎨',
-    'Ajna': 'The Third Eye Chakra, an indigo gateway between the brows, a two-petaled lotus of intuition, linking to transcendent realms, unveiling insights like a cosmic eye piercing the veil of illusion. 🟣 👁️ 🌌 🧠 ✨',
-    'Sahasrara': 'The Crown Chakra, a violet thousand-petaled lotus at the head's summit, merging energies into pure consciousness, achieving enlightenment like a blooming galaxy in eternal samadhi. ⚪ 🌟 🧘 🌌 🌺'
+    'Muladhara': 'The Root Chakra, a crimson lotus rooted deep in the earth’s molten core at the base of your spine, grounding you like an ancient mountain standing firm against stormy winds, embodying unyielding stability and primal survival. 🌍 🔴 🌱 🧘 🏔️',
+    'Svadhisthana': 'The Sacral Chakra, an orange river cascading below your navel, a vermillion lotus cradling a crescent moon, igniting creativity and passion like a dancer’s flame swirling in the ocean’s mystic embrace. 🟠 🌊 🌸 💃 🎨',
+    'Manipura': 'The Solar Plexus Chakra, a golden inferno blazing near your navel, a ten-petaled lotus radiating willpower, its fiery core pulsing like the sun, fueling strength and transformation in a cosmic furnace. 🟡 🔥 🌞 💪 🌟',
+    'Anahata': 'The Heart Chakra, a verdant hexagram lotus blooming in your chest, breathing emerald air of compassion, flowing love like rivers through a starlit universe, bending karma with forgiveness’s gentle breeze. 💚 🌬️ 🌸 ❤️ 🌌',
+    'Vishuddha': 'The Throat Chakra, a sapphire full-moon lotus glowing in your throat, echoing the pure aether, purifying with immortal nectar, inspiring truth like a starry night’s symphony sung by celestial muses. 🔵 🌕 🗣️ 🎤 🎨',
+    'Ajna': 'The Third Eye Chakra, an indigo gateway between your brows, a two-petaled lotus of intuition, piercing the veil of illusion to reveal cosmic insights, like a radiant eye in a nebula’s heart. 🟣 👁️ 🌌 🧠 ✨',
+    'Sahasrara': 'The Crown Chakra, a violet thousand-petaled lotus crowning your head, merging energies into pure consciousness, blooming like a galaxy in eternal samadhi, where enlightenment dances in divine light. ⚪ 🌟 🧘 🌌 🌺'
 }
 
-# Simple letter to phoneme approximation (expanded for languages)
+# Simple letter-to-phoneme approximation
 letter_to_phoneme = {
     'english': {
         'a': '/æ/',
@@ -119,9 +142,142 @@ letter_to_phoneme = {
         'y': '/j/',
         'z': '/z/'
     },
-    'sanskrit': letter_to_phoneme['english'],  # Simplified placeholder; use English approx
-    'hindi': letter_to_phoneme['english'],  # Simplified
-    'kannada': letter_to_phoneme['english']  # Simplified
+    'sanskrit': {
+        'a': '/a/',
+        'ā': '/aː/',
+        'i': '/i/',
+        'ī': '/iː/',
+        'u': '/u/',
+        'ū': '/uː/',
+        'b': '/b/',
+        'bh': '/bʰ/',
+        'm': '/m/',
+        'y': '/j/',
+        'r': '/r/',
+        'l': '/l/',
+        'v': '/ʋ/',
+        'ś': '/ʃ/',
+        's': '/s/',
+        'h': '/h/',
+        'k': '/k/',
+        'kh': '/kʰ/',
+        'g': '/ɡ/',
+        'gh': '/ɡʰ/',
+        'ṅ': '/ŋ/',
+        'c': '/c/',
+        'ch': '/cʰ/',
+        'j': '/ɟ/',
+        'jh': '/ɟʰ/',
+        'ñ': '/ɲ/',
+        'ṭ': '/ʈ/',
+        'ṭh': '/ʈʰ/',
+        'ḍ': '/ɖ/',
+        'ḍh': '/ɖʰ/',
+        'ṇ': '/ɳ/',
+        't': '/t/',
+        'th': '/tʰ/',
+        'd': '/d/',
+        'dh': '/dʰ/',
+        'n': '/n/',
+        'p': '/p/',
+        'ph': '/pʰ/',
+        'kṣ': '/kʃ/'
+    },
+    'hindi': {
+        'a': '/ə/',
+        'ā': '/aː/',
+        'i': '/i/',
+        'ī': '/iː/',
+        'u': '/u/',
+        'ū': '/uː/',
+        'e': '/eː/',
+        'ai': '/ɛː/',
+        'o': '/oː/',
+        'au': '/ɔː/',
+        'b': '/b/',
+        'bh': '/bʰ/',
+        'm': '/m/',
+        'y': '/j/',
+        'r': '/r/',
+        'l': '/l/',
+        'v': '/ʋ/',
+        'ś': '/ʃ/',
+        's': '/s/',
+        'h': '/h/',
+        'k': '/k/',
+        'kh': '/kʰ/',
+        'g': '/ɡ/',
+        'gh': '/ɡʰ/',
+        'ṅ': '/ŋ/',
+        'c': '/c/',
+        'ch': '/cʰ/',
+        'j': '/ɟ/',
+        'jh': '/ɟʰ/',
+        'ñ': '/ɲ/',
+        'ṭ': '/ʈ/',
+        'ṭh': '/ʈʰ/',
+        'ḍ': '/ɖ/',
+        'ḍh': '/ɖʰ/',
+        'ṛ': '/ɽ/',
+        'ṛh': '/ɽʰ/',
+        'ṇ': '/ɳ/',
+        't': '/t/',
+        'th': '/tʰ/',
+        'd': '/d/',
+        'dh': '/dʰ/',
+        'n': '/n/',
+        'p': '/p/',
+        'ph': '/pʰ/',
+        'kṣ': '/kʃ/'
+    },
+    'kannada': {
+        'a': '/a/',
+        'ā': '/aː/',
+        'i': '/i/',
+        'ī': '/iː/',
+        'u': '/u/',
+        'ū': '/uː/',
+        'e': '/e/',
+        'ē': '/eː/',
+        'o': '/o/',
+        'ō': '/oː/',
+        'ai': '/ai/',
+        'au': '/au/',
+        'b': '/b/',
+        'bh': '/bʰ/',
+        'm': '/m/',
+        'y': '/j/',
+        'r': '/r/',
+        'l': '/l/',
+        'ḷ': '/ɭ/',
+        'v': '/ʋ/',
+        'ś': '/ʃ/',
+        's': '/s/',
+        'h': '/h/',
+        'k': '/k/',
+        'kh': '/kʰ/',
+        'g': '/ɡ/',
+        'gh': '/ɡʰ/',
+        'ṅ': '/ŋ/',
+        'c': '/c/',
+        'ch': '/cʰ/',
+        'j': '/ɟ/',
+        'jh': '/ɟʰ/',
+        'ñ': '/ɲ/',
+        'ṭ': '/ʈ/',
+        'ṭh': '/ʈʰ/',
+        'ḍ': '/ɖ/',
+        'ḍh': '/ɖʰ/',
+        'ṇ': '/ɳ/',
+        't': '/t/',
+        'th': '/tʰ/',
+        'd': '/d/',
+        'dh': '/dʰ/',
+        'n': '/n/',
+        'p': '/p/',
+        'ph': '/pʰ/',
+        'kṣ': '/kʃ/'
+    }
 }
 
 def approximate_phonemes(name, language='english'):
@@ -129,74 +285,110 @@ def approximate_phonemes(name, language='english'):
     phonemes = []
     i = 0
     while i < len(name):
+        if language.lower() != 'english' and i < len(name) - 1:
+            # Check for digraphs like 'bh', 'kh', etc.
+            digraph = name[i:i+2]
+            if digraph in letter_to_phoneme[language.lower()]:
+                phonemes.append(letter_to_phoneme[language.lower()][digraph])
+                i += 2
+                continue
         letter = name[i]
         if letter in letter_to_phoneme[language.lower()]:
             phonemes.append(letter_to_phoneme[language.lower()][letter])
         i += 1
-    return list(set(phonemes))  # Unique
+    return list(set(phonemes))
 
-st.title("Enhanced Fun Name Chakra App 🌟✨")
+# Streamlit UI
+st.title("🌟 Cosmic Name Chakra Journey 🌌")
 
-st.markdown("Dive into the mystical world of chakras inspired by Maheshwara Sutras! Enter your name to activate vibrant energies with artistic imagery and emojis! 🎨🌈")
+st.markdown("""
+Embark on a mystical voyage inspired by the ancient Maheshwara Sutras! Enter your name to awaken vibrant chakras, painted with vivid cosmic imagery and sparkling emojis. Discover how your name resonates with the universe's energy! 🎨🌈
+""")
 
-language = st.selectbox("Choose Language:", ["English", "Sanskrit", "Hindi", "Kannada"])
+# Input form
+with st.form("name_form"):
+    language = st.selectbox("Choose Language:", ["English", "Sanskrit", "Hindi", "Kannada"])
+    name = st.text_input("Enter your name:", placeholder="Type your name here...")
+    submitted = st.form_submit_button("Unleash the Chakras! ⚡")
 
-name = st.text_input("Enter your name:", placeholder="Type your name here...")
-
-if name:
-    st.success(f"Namaste, {name}! 👋 Your essence vibrates through the cosmos! 🌌")
+if submitted and name:
+    st.success(f"Namaste, {name}! 🌺 Your essence dances through the cosmic tapestry! ✨")
 
     # Approximate phonemes
     phonemes = approximate_phonemes(name, language)
-    st.info(f"Approximated phonemes in {language}: {', '.join(phonemes)} 🔊 – Echoes of ancient sounds!")
+    st.info(f"Phonemes in {language}: {', '.join(phonemes)} 🔊 – Echoes of ancient vibrations!")
 
     # Map to chakras
     activated_chakras = set()
     for p in phonemes:
         if p in phoneme_to_chakra:
             activated_chakras.add(phoneme_to_chakra[p])
-
+    
     if activated_chakras:
-        st.warning(f"Your name awakens these chakras: {', '.join(activated_chakras)} – A symphony of energy! 🎶✨")
+        st.warning(f"Your name ignites: {', '.join(activated_chakras)} – A celestial symphony! 🎶🌟")
     else:
-        st.warning("Your name's vibrations are uniquely cosmic – beyond mapped chakras! 🌟")
+        st.warning("Your name’s vibrations are uniquely cosmic, transcending mapped chakras! 🌌")
 
     # Vivid Chakra Imagery
-    st.header("Artistic Chakra Visions 🖼️")
+    st.header("🌸 Chakra Visions in Celestial Art 🖼️")
     for chakra in activated_chakras:
-        st.subheader(f"{chakra} Awakens!")
-        st.markdown(chakra_descriptions.get(chakra, 'Mysterious energy flows...'))
-        # Emoji art example
+        st.subheader(f"{chakra} Awakens! 🌟")
+        st.markdown(chakra_descriptions[chakra])
+        # Emoji art for each chakra
         if chakra == 'Muladhara':
             st.text("🔴\n🌍 🌱\n🏔️ 🧘")
-        # Add more for other chakras if desired
+        elif chakra == 'Svadhisthana':
+            st.text("🟠\n🌊 🌸\n💃 🎨")
+        elif chakra == 'Manipura':
+            st.text("🟡\n🔥 🌞\n💪 🌟")
+        elif chakra == 'Anahata':
+            st.text("💚\n🌬️ 🌸\n❤️ 🌌")
+        elif chakra == 'Vishuddha':
+            st.text("🔵\n🌕 🗣️\n🎤 🎨")
+        elif chakra == 'Ajna':
+            st.text("🟣\n👁️ 🌌\n🧠 ✨")
+        elif chakra == 'Sahasrara':
+            st.text("⚪\n🌟 🧘\n🌌 🌺")
         st.markdown("---")
 
-    # Fun Chakra Poem
-    st.header("Your Personalized Chakra Poem 📜🌹")
-    poem_lines = [f"In realms where {name} dances free,"]
+    # Chakra Poem
+    st.header("📜 Your Cosmic Chakra Poem 🌹")
+    poem_lines = [f"In the cosmos, {name} shines bright,"]
     for chakra in activated_chakras:
-        poem_lines.append(f"{chakra} glows with vivid glee – {random.choice(chakra_descriptions[chakra].split(',')[0].split(' ')[-3:])}! ✨")
-    poem_lines.append(f"Embrace the light, let your spirit be! 🚀🌈")
+        words = random.choice(chakra_descriptions[chakra].split(',')[0].split(' ')[-5:-2])
+        poem_lines.append(f"{chakra} glows, {''.join(words).strip()} in starlight! ✨")
+    poem_lines.append(f"Your essence soars, a radiant cosmic flight! 🚀🌈")
     poem = '\n'.join(poem_lines)
     st.text_area("Poem", poem, height=150)
 
-    # Reversed name fun
+    # Fun Outputs
+    st.header("🌌 Playful Cosmic Insights 🎉")
+    # Reversed name
     reversed_name = name[::-1]
-    st.error(f"Whisper your name backwards: **{reversed_name}** 🔄 – A hidden mantra unlocking secrets! 🗝️")
+    st.error(f"Whispered backwards: **{reversed_name}** 🔄 – A secret mantra woven in stardust! 🗝️🌌")
 
-    # Length fun with imagery
+    # Name length with vivid imagery
     length = len(name)
     if length < 5:
-        msg = "Compact like a seed bursting into a majestic tree in Muladhara's earth! 🌱🏔️"
+        msg = "Compact as a seed bursting into Muladhara’s ancient earth, sprouting cosmic roots! 🌱🏔️"
     elif length < 8:
-        msg = "Flowing gracefully like Svadhisthana's creative waves under a sunset sky! 🌅🌊"
+        msg = "Flowing like Svadhisthana’s radiant waves under a sunset sky, alive with passion! 🌅🌊"
     else:
-        msg = "Expansive as Sahasrara's thousand petals blooming in cosmic violet light! 🌌🌺"
+        msg = "Expansive as Sahasrara’s thousand petals, blooming in violet galaxies of enlightenment! 🌌🌺"
     st.success(f"Name length {length}: {msg}")
+
+    # Chakra Energy Level
+    energy_level = len(activated_chakras)
+    if energy_level == 0:
+        energy_msg = "A mysterious spark, flickering beyond the cosmos, ready to ignite! ⚡️🌌"
+    elif energy_level <= 3:
+        energy_msg = "A glowing ember, warming the universe with gentle chakra light! 🔥🌟"
+    else:
+        energy_msg = "A supernova of energy, blazing through chakras like a celestial storm! 🌠🚀"
+    st.info(f"Your Chakra Energy: {energy_msg}")
 
     # Activation button
     if st.button("Activate Your Chakras! ⚡"):
         st.confetti()
         st.balloons()
-        st.write("Chakras ignited with artistic brilliance – feel the vivid energy surge! 🎉🔥")
+        st.write("Chakras ablaze with cosmic brilliance – your energy surges through the universe! 🎉🔥")
